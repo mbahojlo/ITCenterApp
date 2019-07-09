@@ -40,8 +40,6 @@ namespace ITCenterApp
                 netPriceTotal += (decimal)row.Cells["rowNetPrice"].Value * (decimal)row.Cells["quantity"].Value;
                 grossPriceTotal += (decimal)row.Cells["rowGrossPrice"].Value * (decimal)row.Cells["quantity"].Value;
             }
-            // update databas and then update grid
-            
           
             Headers header = (Headers)dgv_headers.CurrentRow.DataBoundItem;
             header.NetPrice = netPriceTotal;
@@ -115,6 +113,74 @@ namespace ITCenterApp
             }
         }
 
+        private void HeaderCreateUpdate()
+        {
+            Headers header = new Headers();
+
+            header.Name = tb_headerName.Text;
+
+            int customerNumber;
+            int.TryParse(tb_headerCustomerNumber.Text, out customerNumber);
+            header.CustomerNumber = customerNumber;
+
+            header.CreatedDate = DateTime.Now;
+
+            decimal netPrice;
+            decimal.TryParse(tb_headerNetPrice.Text, out netPrice);
+            header.NetPrice = netPrice;
+
+            header.GrossPrice = netPrice * 1.23M;
+            if (selectedIdHeader != -1)
+            {
+                header.Id = selectedIdHeader;
+                _dbManager.UpdateHeader(header);
+            }
+            else
+            {
+                _dbManager.CreateHeader(header);
+            }
+
+            LoadHeders();
+            ClearHeder();
+        }
+
+        private void RowCreateUpdate()
+        {
+            Rows row = new Rows();
+
+            row.ArticleName = tb_rowArticleName.Text;
+
+            decimal quantity;
+            decimal.TryParse(tb_rowQuantity.Text, out quantity);
+            row.Quantity = quantity;
+
+            decimal netPrice;
+            decimal.TryParse(tb_rowNetPrice.Text, out netPrice);
+            row.NetPrice = netPrice;
+
+            row.GrossPrice = row.NetPrice * 1.23M;
+
+            row.HeaderId = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
+
+            if (selectedIdRow != -1)
+            {
+                row.Id = selectedIdRow;
+                _dbManager.UpdateRow(row);
+            }
+            else
+            {
+                _dbManager.CreateRow(row);
+            }
+
+            LoadRows(row.HeaderId);
+            ClearRow();
+            UpdateHederRow();
+        }
+
+        #endregion Methods
+
+        #region Events
+
         private void dgv_rows_DoubleClick(object sender, EventArgs e)
         {
             if (dgv_rows.CurrentRow.Index != -1)
@@ -131,10 +197,6 @@ namespace ITCenterApp
 
             }
         }
-
-        #endregion Methods
-
-        #region Events
 
         private void tb_rowQuantity_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -158,33 +220,7 @@ namespace ITCenterApp
 
         private void btn_headerCreateUpdate_Click(object sender, EventArgs e)
         {
-            Headers header = new Headers();
-
-            header.Name = tb_headerName.Text;
-
-            int customerNumber;
-            int.TryParse(tb_headerCustomerNumber.Text, out customerNumber);
-            header.CustomerNumber = customerNumber;
-
-            header.CreatedDate = DateTime.Now;
-
-            decimal netPrice;
-            decimal.TryParse(tb_headerNetPrice.Text, out netPrice);
-            header.NetPrice = netPrice;
-            
-            header.GrossPrice = netPrice * 1.23M ;
-            if (selectedIdHeader != -1)
-            {
-                header.Id = selectedIdHeader;
-                _dbManager.UpdateHeader(header);
-            }
-            else
-            {
-                _dbManager.CreateHeader(header);
-            }
-
-            LoadHeders();
-            ClearHeder();
+            HeaderCreateUpdate();
         }
 
         private void MainApp_Load(object sender, EventArgs e)
@@ -194,26 +230,30 @@ namespace ITCenterApp
 
         private void btn_headerDelete_Click(object sender, EventArgs e)
         {
-            
+            if (dgv_headers.Rows.Count > 0)
             if (MessageBox.Show("Are you shure to delete record", "Deleting", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int id = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
                 _dbManager.DeleteHeader(id);
                 LoadHeders();
+                ClearHeder();
             }
-            ClearHeder();
+           
         }
 
         private void btn_rowDelete_Click(object sender, EventArgs e)
         {
+            if (dgv_rows.Rows.Count > 0)
             if (MessageBox.Show("Are you shure to delete record", "Deleting", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int rowId = (int)dgv_rows.CurrentRow.Cells["rowId"].Value;
+                int headerid = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
                 _dbManager.DeleteRow(rowId);
-                LoadRows(selectedIdHeader);
-            }
-            ClearRow();
-            UpdateHederRow();
+                LoadRows(headerid);
+                ClearRow();
+                UpdateHederRow();
+             }
+            
         }
 
         private void btn_rowCancel_Click(object sender, EventArgs e)
@@ -245,47 +285,17 @@ namespace ITCenterApp
         private void dgv_headers_SelectionChanged(object sender, EventArgs e)
         {
             
-            selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
-            LoadRows(selectedIdHeader);
+            int id = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
+            LoadRows(id);
         }
 
         private void btn_rowCreateUpdate_Click(object sender, EventArgs e)
         {
-            selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
-            Rows row = new Rows();
-
-            row.ArticleName = tb_rowArticleName.Text;
-
-            decimal quantity;
-            decimal.TryParse(tb_rowQuantity.Text, out quantity);
-            row.Quantity = quantity;
-
-            decimal netPrice;
-            decimal.TryParse(tb_rowNetPrice.Text, out netPrice);
-            row.NetPrice = netPrice ;
-
-            row.GrossPrice = row.NetPrice * 1.23M;
-
-            row.HeaderId = selectedIdHeader;
-
-            if (selectedIdRow != -1)
-            {
-                row.Id = selectedIdRow;
-                _dbManager.UpdateRow(row);
-            }
-            else
-            {
-                _dbManager.CreateRow(row);
-            }
-
-            LoadRows(selectedIdHeader);
-            ClearRow();
-            UpdateHederRow();
+            RowCreateUpdate();
         }
 
         private void btn_github_ClickAsync(object sender, EventArgs e)
         {
-          
             var client = new GitHubClient(new ProductHeaderValue("ITCenterApp"));
             var repo = client.Repository.GetAllForUser("mbahojlo").GetAwaiter().GetResult().Where(repos => repos.Name == "ITCenterApp").FirstOrDefault();
             GitHubInfo ghi = new GitHubInfo(repo.CreatedAt,repo.Owner.Login,repo.StargazersCount);
