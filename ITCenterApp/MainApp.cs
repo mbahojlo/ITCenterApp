@@ -243,12 +243,14 @@ namespace ITCenterApp
 
         private void dgv_headers_SelectionChanged(object sender, EventArgs e)
         {
+            
             selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
             LoadRows(selectedIdHeader);
         }
 
         private void btn_rowCreateUpdate_Click(object sender, EventArgs e)
         {
+            selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
             Rows row = new Rows();
 
             row.ArticleName = tb_rowArticleName.Text;
@@ -262,6 +264,7 @@ namespace ITCenterApp
             row.NetPrice = netPrice ;
 
             row.GrossPrice = row.NetPrice * 1.23M;
+
             row.HeaderId = selectedIdHeader;
 
             if (selectedIdRow != -1)
