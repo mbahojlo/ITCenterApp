@@ -15,6 +15,10 @@ namespace ITCenterApp
         [STAThread]
         static void Main()
         {
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => HandleUnhandledException(args.ExceptionObject as Exception);
+            Application.ThreadException += (sender, args) => HandleUnhandledException(args.Exception);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -24,6 +28,11 @@ namespace ITCenterApp
                 var app = scope.Resolve<IMainApp>();
                 app.Run();
             }
+
+        }
+        static void HandleUnhandledException(Exception e)
+        {
+            MessageBox.Show(e.Message);
         }
     }
 }

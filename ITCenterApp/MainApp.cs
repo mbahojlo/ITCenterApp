@@ -1,4 +1,5 @@
 ﻿using ITCenterApp.Database;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -282,9 +283,26 @@ namespace ITCenterApp
             UpdateHederRow();
         }
 
-        private void btn_github_Click(object sender, EventArgs e)
+        private async void btn_github_ClickAsync(object sender, EventArgs e)
         {
+            //var client = new GitHubClient(new ProductHeaderValue("ITCenterApp"));
+            //var user = await client.User.Get("mbahojlo");
+            //var data = client.GetLastApiInfo();
+            //var repo = client.Repository.GetAllForUser("mbahojlo");
+            //var info = client.Repository.GetAllForUser("mbahojlo").GetAwaiter().GetResult()[1].StargazersCount;
+            //// Console.WriteLine(user.Followers + " folks love the half ogre!");
+            //Console.WriteLine("{0} has {1} public repositories - go check out their profile at {2}", user.Login, user.PublicRepos, user.Url);
 
+            var client = new GitHubClient(new ProductHeaderValue("my-cool-app"));
+            var basicAuth = new Credentials("mbahojlo", "Gg123qwe@2"); // NOTE: not real credentials
+            client.Credentials = basicAuth;
+            var user = client.User.Get("mbahojlo").GetAwaiter().GetResult();
+            var meta = client.Miscellaneous.GetMetadata().GetAwaiter().GetResult();
+            var repo = client.Repository.GetAllForUser("mbahojlo").GetAwaiter().GetResult()[1];//.StargazersCount;
+
+
+
+            var r = client.Repository.GetAllForCurrent().GetAwaiter().GetResult().Where(repos => repos.Name == "ITCenterApp").FirstOrDefault();
         }
 
         #endregion Events

@@ -346,7 +346,7 @@
             this.btn_github.TabIndex = 24;
             this.btn_github.Text = "Github Info";
             this.btn_github.UseVisualStyleBackColor = true;
-            this.btn_github.Click += new System.EventHandler(this.btn_github_Click);
+            this.btn_github.Click += new System.EventHandler(this.btn_github_ClickAsync);
             // 
             // Id
             // 
