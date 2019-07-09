@@ -15,5 +15,9 @@ namespace ITCenterApp.Database
         Headers GetHeaderById(int id);
         void UpdateHeader(Headers header);
         List<Rows> GetRowsById(int id);
+        void UpdateRow(Rows row);
+        void CreateRow(Rows row);
+        void DeleteRow(int id);
+        Rows GetRowById(int selectedIdHeader);
     }
 }

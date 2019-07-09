@@ -36,6 +36,12 @@
             this.NetPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GrossPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_rows = new System.Windows.Forms.DataGridView();
+            this.rowId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HeaderId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ArticleName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RowNetPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RowGrossPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_headerCreateUpdate = new System.Windows.Forms.Button();
             this.btn_headerDelete = new System.Windows.Forms.Button();
             this.btn_headerCancel = new System.Windows.Forms.Button();
@@ -54,9 +60,9 @@
             this.tb_rowArticleName = new System.Windows.Forms.TextBox();
             this.lbl_rowNetPrice = new System.Windows.Forms.Label();
             this.lbl_rowArticleName = new System.Windows.Forms.Label();
-            this.ArticleName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rowId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HeaderId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lbl_headers_info = new System.Windows.Forms.Label();
+            this.lbl_rows_info = new System.Windows.Forms.Label();
+            this.btn_github = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_headers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_rows)).BeginInit();
             this.SuspendLayout();
@@ -137,19 +143,69 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_rows.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_rows.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ArticleName,
             this.rowId,
-            this.HeaderId});
-            this.dgv_rows.Location = new System.Drawing.Point(352, 229);
+            this.HeaderId,
+            this.ArticleName,
+            this.Quantity,
+            this.RowNetPrice,
+            this.RowGrossPrice});
+            this.dgv_rows.Location = new System.Drawing.Point(352, 258);
+            this.dgv_rows.MultiSelect = false;
             this.dgv_rows.Name = "dgv_rows";
             this.dgv_rows.ReadOnly = true;
             this.dgv_rows.RowTemplate.Height = 24;
+            this.dgv_rows.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_rows.Size = new System.Drawing.Size(755, 194);
             this.dgv_rows.TabIndex = 1;
+            this.dgv_rows.DoubleClick += new System.EventHandler(this.dgv_rows_DoubleClick);
+            // 
+            // rowId
+            // 
+            this.rowId.DataPropertyName = "Id";
+            this.rowId.HeaderText = "Id";
+            this.rowId.Name = "rowId";
+            this.rowId.ReadOnly = true;
+            this.rowId.Visible = false;
+            // 
+            // HeaderId
+            // 
+            this.HeaderId.DataPropertyName = "HeaderId";
+            this.HeaderId.HeaderText = "HeaderId";
+            this.HeaderId.Name = "HeaderId";
+            this.HeaderId.ReadOnly = true;
+            this.HeaderId.Visible = false;
+            // 
+            // ArticleName
+            // 
+            this.ArticleName.DataPropertyName = "ArticleName";
+            this.ArticleName.HeaderText = "ArticleName";
+            this.ArticleName.Name = "ArticleName";
+            this.ArticleName.ReadOnly = true;
+            // 
+            // Quantity
+            // 
+            this.Quantity.DataPropertyName = "Quantity";
+            this.Quantity.HeaderText = "Quantity";
+            this.Quantity.Name = "Quantity";
+            this.Quantity.ReadOnly = true;
+            // 
+            // RowNetPrice
+            // 
+            this.RowNetPrice.DataPropertyName = "NetPrice";
+            this.RowNetPrice.HeaderText = "NetPrice";
+            this.RowNetPrice.Name = "RowNetPrice";
+            this.RowNetPrice.ReadOnly = true;
+            // 
+            // RowGrossPrice
+            // 
+            this.RowGrossPrice.DataPropertyName = "GrossPrice";
+            this.RowGrossPrice.HeaderText = "GrossPrice";
+            this.RowGrossPrice.Name = "RowGrossPrice";
+            this.RowGrossPrice.ReadOnly = true;
             // 
             // btn_headerCreateUpdate
             // 
-            this.btn_headerCreateUpdate.Location = new System.Drawing.Point(90, 200);
+            this.btn_headerCreateUpdate.Location = new System.Drawing.Point(90, 190);
             this.btn_headerCreateUpdate.Name = "btn_headerCreateUpdate";
             this.btn_headerCreateUpdate.Size = new System.Drawing.Size(75, 33);
             this.btn_headerCreateUpdate.TabIndex = 2;
@@ -159,7 +215,7 @@
             // 
             // btn_headerDelete
             // 
-            this.btn_headerDelete.Location = new System.Drawing.Point(171, 200);
+            this.btn_headerDelete.Location = new System.Drawing.Point(171, 190);
             this.btn_headerDelete.Name = "btn_headerDelete";
             this.btn_headerDelete.Size = new System.Drawing.Size(75, 33);
             this.btn_headerDelete.TabIndex = 3;
@@ -169,7 +225,7 @@
             // 
             // btn_headerCancel
             // 
-            this.btn_headerCancel.Location = new System.Drawing.Point(252, 200);
+            this.btn_headerCancel.Location = new System.Drawing.Point(252, 190);
             this.btn_headerCancel.Name = "btn_headerCancel";
             this.btn_headerCancel.Size = new System.Drawing.Size(75, 33);
             this.btn_headerCancel.TabIndex = 4;
@@ -179,7 +235,7 @@
             // 
             // btn_rowCancel
             // 
-            this.btn_rowCancel.Location = new System.Drawing.Point(252, 400);
+            this.btn_rowCancel.Location = new System.Drawing.Point(252, 419);
             this.btn_rowCancel.Name = "btn_rowCancel";
             this.btn_rowCancel.Size = new System.Drawing.Size(75, 33);
             this.btn_rowCancel.TabIndex = 7;
@@ -189,7 +245,7 @@
             // 
             // btn_rowDelete
             // 
-            this.btn_rowDelete.Location = new System.Drawing.Point(171, 400);
+            this.btn_rowDelete.Location = new System.Drawing.Point(171, 419);
             this.btn_rowDelete.Name = "btn_rowDelete";
             this.btn_rowDelete.Size = new System.Drawing.Size(75, 33);
             this.btn_rowDelete.TabIndex = 6;
@@ -199,7 +255,7 @@
             // 
             // btn_rowCreateUpdate
             // 
-            this.btn_rowCreateUpdate.Location = new System.Drawing.Point(90, 400);
+            this.btn_rowCreateUpdate.Location = new System.Drawing.Point(90, 419);
             this.btn_rowCreateUpdate.Name = "btn_rowCreateUpdate";
             this.btn_rowCreateUpdate.Size = new System.Drawing.Size(75, 33);
             this.btn_rowCreateUpdate.TabIndex = 5;
@@ -259,7 +315,7 @@
             // 
             // tb_rowNetPrice
             // 
-            this.tb_rowNetPrice.Location = new System.Drawing.Point(171, 312);
+            this.tb_rowNetPrice.Location = new System.Drawing.Point(171, 341);
             this.tb_rowNetPrice.Name = "tb_rowNetPrice";
             this.tb_rowNetPrice.Size = new System.Drawing.Size(100, 22);
             this.tb_rowNetPrice.TabIndex = 21;
@@ -267,7 +323,7 @@
             // 
             // tb_rowQuantity
             // 
-            this.tb_rowQuantity.Location = new System.Drawing.Point(171, 284);
+            this.tb_rowQuantity.Location = new System.Drawing.Point(171, 313);
             this.tb_rowQuantity.Name = "tb_rowQuantity";
             this.tb_rowQuantity.Size = new System.Drawing.Size(100, 22);
             this.tb_rowQuantity.TabIndex = 20;
@@ -276,7 +332,7 @@
             // lbl_rowQuantity
             // 
             this.lbl_rowQuantity.AutoSize = true;
-            this.lbl_rowQuantity.Location = new System.Drawing.Point(80, 287);
+            this.lbl_rowQuantity.Location = new System.Drawing.Point(80, 316);
             this.lbl_rowQuantity.Name = "lbl_rowQuantity";
             this.lbl_rowQuantity.Size = new System.Drawing.Size(61, 17);
             this.lbl_rowQuantity.TabIndex = 19;
@@ -284,7 +340,7 @@
             // 
             // tb_rowArticleName
             // 
-            this.tb_rowArticleName.Location = new System.Drawing.Point(171, 256);
+            this.tb_rowArticleName.Location = new System.Drawing.Point(171, 285);
             this.tb_rowArticleName.Name = "tb_rowArticleName";
             this.tb_rowArticleName.Size = new System.Drawing.Size(100, 22);
             this.tb_rowArticleName.TabIndex = 18;
@@ -292,7 +348,7 @@
             // lbl_rowNetPrice
             // 
             this.lbl_rowNetPrice.AutoSize = true;
-            this.lbl_rowNetPrice.Location = new System.Drawing.Point(75, 315);
+            this.lbl_rowNetPrice.Location = new System.Drawing.Point(75, 344);
             this.lbl_rowNetPrice.Name = "lbl_rowNetPrice";
             this.lbl_rowNetPrice.Size = new System.Drawing.Size(66, 17);
             this.lbl_rowNetPrice.TabIndex = 17;
@@ -301,37 +357,48 @@
             // lbl_rowArticleName
             // 
             this.lbl_rowArticleName.AutoSize = true;
-            this.lbl_rowArticleName.Location = new System.Drawing.Point(53, 259);
+            this.lbl_rowArticleName.Location = new System.Drawing.Point(53, 288);
             this.lbl_rowArticleName.Name = "lbl_rowArticleName";
             this.lbl_rowArticleName.Size = new System.Drawing.Size(88, 17);
             this.lbl_rowArticleName.TabIndex = 16;
             this.lbl_rowArticleName.Text = "Article Name";
             // 
-            // ArticleName
+            // lbl_headers_info
             // 
-            this.ArticleName.HeaderText = "Column1";
-            this.ArticleName.Name = "ArticleName";
-            this.ArticleName.ReadOnly = true;
+            this.lbl_headers_info.AutoSize = true;
+            this.lbl_headers_info.Location = new System.Drawing.Point(349, 9);
+            this.lbl_headers_info.Name = "lbl_headers_info";
+            this.lbl_headers_info.Size = new System.Drawing.Size(214, 17);
+            this.lbl_headers_info.TabIndex = 22;
+            this.lbl_headers_info.Text = "Headers (double click to update)";
             // 
-            // rowId
+            // lbl_rows_info
             // 
-            this.rowId.DataPropertyName = "Id";
-            this.rowId.HeaderText = "Id";
-            this.rowId.Name = "rowId";
-            this.rowId.ReadOnly = true;
+            this.lbl_rows_info.AutoSize = true;
+            this.lbl_rows_info.Location = new System.Drawing.Point(349, 238);
+            this.lbl_rows_info.Name = "lbl_rows_info";
+            this.lbl_rows_info.Size = new System.Drawing.Size(194, 17);
+            this.lbl_rows_info.TabIndex = 23;
+            this.lbl_rows_info.Text = "Rows (double click to update)";
             // 
-            // HeaderId
+            // btn_github
             // 
-            this.HeaderId.DataPropertyName = "HeaderId";
-            this.HeaderId.HeaderText = "HeaderId";
-            this.HeaderId.Name = "HeaderId";
-            this.HeaderId.ReadOnly = true;
+            this.btn_github.Location = new System.Drawing.Point(997, 458);
+            this.btn_github.Name = "btn_github";
+            this.btn_github.Size = new System.Drawing.Size(110, 33);
+            this.btn_github.TabIndex = 24;
+            this.btn_github.Text = "Github Info";
+            this.btn_github.UseVisualStyleBackColor = true;
+            this.btn_github.Click += new System.EventHandler(this.btn_github_Click);
             // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1173, 450);
+            this.ClientSize = new System.Drawing.Size(1173, 506);
+            this.Controls.Add(this.btn_github);
+            this.Controls.Add(this.lbl_rows_info);
+            this.Controls.Add(this.lbl_headers_info);
             this.Controls.Add(this.tb_rowNetPrice);
             this.Controls.Add(this.tb_rowQuantity);
             this.Controls.Add(this.lbl_rowQuantity);
@@ -352,7 +419,6 @@
             this.Controls.Add(this.btn_headerCreateUpdate);
             this.Controls.Add(this.dgv_rows);
             this.Controls.Add(this.dgv_headers);
-            //this.Name = "MainApp";
             this.Text = "Zadanie rekrutacyjne";
             this.Load += new System.EventHandler(this.MainApp_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_headers)).EndInit();
@@ -390,9 +456,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn CreatedDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn NetPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn GrossPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ArticleName;
         private System.Windows.Forms.DataGridViewTextBoxColumn rowId;
         private System.Windows.Forms.DataGridViewTextBoxColumn HeaderId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ArticleName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Quantity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RowNetPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RowGrossPrice;
+        private System.Windows.Forms.Label lbl_headers_info;
+        private System.Windows.Forms.Label lbl_rows_info;
+        private System.Windows.Forms.Button btn_github;
     }
 }
 

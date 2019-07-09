@@ -25,17 +25,16 @@ namespace ITCenterApp.Database
                 _dbContext.Headers.Attach(header);
                 _dbContext.Headers.Add(header);
                 _dbContext.Entry(header).State = System.Data.Entity.EntityState.Modified;
-                //_dbContext.Headers.(header);
                 _dbContext.SaveChanges();
             }
         }
 
-        public void DeleteHeader(int Id)
+        public void DeleteHeader(int id)
         {
             using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
             {
                 Headers header = new Headers();
-                header.Id = Id;
+                header.Id = id;
                 _dbContext.Headers.Attach(header);
                 _dbContext.Headers.Remove(header);
                 _dbContext.SaveChanges();
@@ -63,6 +62,46 @@ namespace ITCenterApp.Database
             using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
             {
                 return _dbContext.Rows.Where(r => r.HeaderId == id).ToList();
+            }
+        }
+
+        public void UpdateRow(Rows row)
+        {
+            using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
+            {
+                _dbContext.Rows.Attach(row);
+                _dbContext.Rows.Add(row);
+                _dbContext.Entry(row).State = System.Data.Entity.EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void CreateRow(Rows row)
+        {
+            using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
+            {
+                _dbContext.Rows.Add(row);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteRow(int id)
+        {
+            using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
+            {
+                Rows row = new Rows();
+                row.Id = id;
+                _dbContext.Rows.Attach(row);
+                _dbContext.Rows.Remove(row);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public Rows GetRowById(int selectedIdRow)
+        {
+            using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
+            {
+                return _dbContext.Rows.Where(r => r.Id == selectedIdRow).FirstOrDefault();
             }
         }
     }
