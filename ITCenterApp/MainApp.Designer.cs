@@ -29,12 +29,6 @@
         private void InitializeComponent()
         {
             this.dgv_headers = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CustomerNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CreatedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NetPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GrossPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_rows = new System.Windows.Forms.DataGridView();
             this.rowId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HeaderId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,6 +57,12 @@
             this.lbl_headers_info = new System.Windows.Forms.Label();
             this.lbl_rows_info = new System.Windows.Forms.Label();
             this.btn_github = new System.Windows.Forms.Button();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HeaderName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CustomerNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CreatedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NetPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GrossPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_headers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_rows)).BeginInit();
             this.SuspendLayout();
@@ -76,8 +76,8 @@
             this.dgv_headers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_headers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Id,
+            this.HeaderName,
             this.CustomerNumber,
-            this.Name,
             this.CreatedDate,
             this.NetPrice,
             this.GrossPrice});
@@ -91,49 +91,6 @@
             this.dgv_headers.TabIndex = 0;
             this.dgv_headers.SelectionChanged += new System.EventHandler(this.dgv_headers_SelectionChanged);
             this.dgv_headers.DoubleClick += new System.EventHandler(this.dgv_headers_DoubleClick);
-            // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            this.Id.Visible = false;
-            // 
-            // CustomerNumber
-            // 
-            this.CustomerNumber.DataPropertyName = "CustomerNumber";
-            this.CustomerNumber.HeaderText = "CustomerNumber";
-            this.CustomerNumber.Name = "CustomerNumber";
-            this.CustomerNumber.ReadOnly = true;
-            // 
-            // Name
-            // 
-            this.Name.DataPropertyName = "Name";
-            this.Name.HeaderText = "Name";
-            this.Name.Name = "Name";
-            this.Name.ReadOnly = true;
-            // 
-            // CreatedDate
-            // 
-            this.CreatedDate.DataPropertyName = "CreatedDate";
-            this.CreatedDate.HeaderText = "CreatedDate";
-            this.CreatedDate.Name = "CreatedDate";
-            this.CreatedDate.ReadOnly = true;
-            // 
-            // NetPrice
-            // 
-            this.NetPrice.DataPropertyName = "NetPrice";
-            this.NetPrice.HeaderText = "NetPrice";
-            this.NetPrice.Name = "NetPrice";
-            this.NetPrice.ReadOnly = true;
-            // 
-            // GrossPrice
-            // 
-            this.GrossPrice.DataPropertyName = "GrossPrice";
-            this.GrossPrice.HeaderText = "GrossPrice";
-            this.GrossPrice.Name = "GrossPrice";
-            this.GrossPrice.ReadOnly = true;
             // 
             // dgv_rows
             // 
@@ -391,6 +348,49 @@
             this.btn_github.UseVisualStyleBackColor = true;
             this.btn_github.Click += new System.EventHandler(this.btn_github_Click);
             // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            this.Id.Visible = false;
+            // 
+            // HeaderName
+            // 
+            this.HeaderName.DataPropertyName = "Name";
+            this.HeaderName.HeaderText = "Name";
+            this.HeaderName.Name = "HeaderName";
+            this.HeaderName.ReadOnly = true;
+            // 
+            // CustomerNumber
+            // 
+            this.CustomerNumber.DataPropertyName = "CustomerNumber";
+            this.CustomerNumber.HeaderText = "CustomerNumber";
+            this.CustomerNumber.Name = "CustomerNumber";
+            this.CustomerNumber.ReadOnly = true;
+            // 
+            // CreatedDate
+            // 
+            this.CreatedDate.DataPropertyName = "CreatedDate";
+            this.CreatedDate.HeaderText = "CreatedDate";
+            this.CreatedDate.Name = "CreatedDate";
+            this.CreatedDate.ReadOnly = true;
+            // 
+            // NetPrice
+            // 
+            this.NetPrice.DataPropertyName = "NetPrice";
+            this.NetPrice.HeaderText = "NetPrice";
+            this.NetPrice.Name = "NetPrice";
+            this.NetPrice.ReadOnly = true;
+            // 
+            // GrossPrice
+            // 
+            this.GrossPrice.DataPropertyName = "GrossPrice";
+            this.GrossPrice.HeaderText = "GrossPrice";
+            this.GrossPrice.Name = "GrossPrice";
+            this.GrossPrice.ReadOnly = true;
+            // 
             // MainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -419,7 +419,8 @@
             this.Controls.Add(this.btn_headerCreateUpdate);
             this.Controls.Add(this.dgv_rows);
             this.Controls.Add(this.dgv_headers);
-            this.Text = "Zadanie rekrutacyjne";
+            this.Name = "MainApp";
+            this.Text = "Zadanie rekrutacyjne - Marcin Bahojło";
             this.Load += new System.EventHandler(this.MainApp_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_headers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_rows)).EndInit();
@@ -450,12 +451,6 @@
         private System.Windows.Forms.TextBox tb_rowArticleName;
         private System.Windows.Forms.Label lbl_rowNetPrice;
         private System.Windows.Forms.Label lbl_rowArticleName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CustomerNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CreatedDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NetPrice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GrossPrice;
         private System.Windows.Forms.DataGridViewTextBoxColumn rowId;
         private System.Windows.Forms.DataGridViewTextBoxColumn HeaderId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArticleName;
@@ -465,6 +460,12 @@
         private System.Windows.Forms.Label lbl_headers_info;
         private System.Windows.Forms.Label lbl_rows_info;
         private System.Windows.Forms.Button btn_github;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HeaderName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CustomerNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CreatedDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NetPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GrossPrice;
     }
 }
 

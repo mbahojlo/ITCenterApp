@@ -28,6 +28,113 @@ namespace ITCenterApp
             return this.ShowDialog();
         }
 
+        #region Methods
+
+        private void UpdateHederRow()
+        {
+            decimal netPriceTotal = 0M;
+            decimal grossPriceTotal = 0M;
+            foreach (DataGridViewRow row in dgv_rows.Rows)
+            {
+                netPriceTotal += (decimal)row.Cells["rowNetPrice"].Value * (decimal)row.Cells["quantity"].Value;
+                grossPriceTotal += (decimal)row.Cells["rowGrossPrice"].Value * (decimal)row.Cells["quantity"].Value;
+            }
+            // update databas and then update grid
+            
+          
+            Headers header = (Headers)dgv_headers.CurrentRow.DataBoundItem;
+            header.NetPrice = netPriceTotal;
+            header.GrossPrice = grossPriceTotal;
+            _dbManager.UpdateHeader(header);
+            dgv_headers.Refresh();
+        }
+
+        private void ClearHeder()
+        {
+            tb_headerName.Text = "";
+            tb_headerNetPrice.Text = "";
+            tb_headerCustomerNumber.Text = "";
+            btn_headerCreateUpdate.Text = "Create";
+            selectedIdHeader = -1;
+        }
+
+        private void ClearRow()
+        {
+            tb_rowArticleName.Text = "";
+            tb_rowNetPrice.Text = "";
+            tb_rowQuantity.Text = "";
+            btn_rowCreateUpdate.Text = "Create";
+            selectedIdRow = -1;
+        }
+
+        private void LoadHeders()
+        {
+            try
+            {
+                dgv_headers.AutoGenerateColumns = false;
+                dgv_headers.DataSource = _dbManager.GetHeaders();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is a DB connection problem.");
+            }
+        }
+       
+        private static void OnlyDecimal(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf(',') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private static void OnlyNumber(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void LoadRows(int id)
+        {
+            try
+            {
+                dgv_rows.AutoGenerateColumns = false;
+                dgv_rows.DataSource = _dbManager.GetRowsById(id);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is a DB connection problem.");
+            }
+        }
+
+        private void dgv_rows_DoubleClick(object sender, EventArgs e)
+        {
+            if (dgv_rows.CurrentRow.Index != -1)
+            {
+                selectedIdRow = (int)dgv_rows.CurrentRow.Cells["rowId"].Value;
+                Rows row = _dbManager.GetRowById(selectedIdRow);
+                if (row != null)
+                {
+                    tb_rowArticleName.Text = row.ArticleName;
+                    tb_rowNetPrice.Text = row.NetPrice.ToString();
+                    tb_rowQuantity.Text = row.Quantity.ToString();
+                    btn_rowCreateUpdate.Text = "Update";
+                }
+
+            }
+        }
+
+        #endregion Methods
+
+        #region Events
+
         private void tb_rowQuantity_KeyPress(object sender, KeyPressEventArgs e)
         {
             OnlyDecimal(sender, e);
@@ -96,9 +203,48 @@ namespace ITCenterApp
             ClearHeder();
         }
 
+        private void btn_rowDelete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you shure to delete record", "Deleting", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                int rowId = (int)dgv_rows.CurrentRow.Cells["rowId"].Value;
+                _dbManager.DeleteRow(rowId);
+                LoadRows(selectedIdHeader);
+            }
+            ClearRow();
+            UpdateHederRow();
+        }
+
+        private void btn_rowCancel_Click(object sender, EventArgs e)
+        {
+            ClearRow();
+        }
+
         private void btn_headerCancel_Click(object sender, EventArgs e)
         {
             ClearHeder();
+        }
+
+        private void dgv_headers_DoubleClick(object sender, EventArgs e)
+        {
+            if (dgv_headers.CurrentRow.Index != -1)
+            {
+                selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
+                Headers header = _dbManager.GetHeaderById(selectedIdHeader);
+                if (header != null)
+                {
+                    tb_headerCustomerNumber.Text = header.CustomerNumber.ToString();
+                    tb_headerName.Text = header.Name.ToString();
+                    tb_headerNetPrice.Text = header.NetPrice.ToString();
+                    btn_headerCreateUpdate.Text = "Update";
+                }
+            }
+        }
+
+        private void dgv_headers_SelectionChanged(object sender, EventArgs e)
+        {
+            selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
+            LoadRows(selectedIdHeader);
         }
 
         private void btn_rowCreateUpdate_Click(object sender, EventArgs e)
@@ -113,7 +259,7 @@ namespace ITCenterApp
 
             decimal netPrice;
             decimal.TryParse(tb_rowNetPrice.Text, out netPrice);
-            row.NetPrice = netPrice * quantity;
+            row.NetPrice = netPrice ;
 
             row.GrossPrice = row.NetPrice * 1.23M;
             row.HeaderId = selectedIdHeader;
@@ -133,150 +279,11 @@ namespace ITCenterApp
             UpdateHederRow();
         }
 
-        private void UpdateHederRow()
-        {
-            decimal netPriceTotal = 0M;
-            decimal grossPriceTotal = 0M;
-            foreach (DataGridViewRow row in dgv_rows.Rows)
-            {
-                netPriceTotal += (decimal)row.Cells["rowNetPrice"].Value;
-                grossPriceTotal += (decimal)row.Cells["rowGrossPrice"].Value;
-            }
-            // update databas and then update grid
-
-            Headers obj = (Headers)dgv_headers.CurrentRow.DataBoundItem;
-            obj.NetPrice = netPriceTotal;
-            obj.GrossPrice = grossPriceTotal;
-            dgv_headers.Refresh();
-        }
-
-        private void btn_rowDelete_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Are you shure to delete record", "Deleting", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                int rowId = (int)dgv_rows.CurrentRow.Cells["rowId"].Value;
-                _dbManager.DeleteRow(rowId);
-                LoadRows(selectedIdHeader);
-            }
-            ClearRow();
-        }
-
-        private void btn_rowCancel_Click(object sender, EventArgs e)
-        {
-            ClearRow();
-        }
-
-        private void ClearHeder()
-        {
-            tb_headerName.Text = "";
-            tb_headerNetPrice.Text = "";
-            tb_headerCustomerNumber.Text = "";
-            btn_headerCreateUpdate.Text = "Create";
-            selectedIdHeader = -1;
-        }
-
-        private void ClearRow()
-        {
-            tb_rowArticleName.Text = "";
-            tb_rowNetPrice.Text = "";
-            tb_rowQuantity.Text = "";
-            btn_rowCreateUpdate.Text = "Create";
-            selectedIdRow = -1;
-        }
-
-        private void LoadHeders()
-        {
-            try
-            {
-                dgv_headers.AutoGenerateColumns = false;
-                dgv_headers.DataSource = _dbManager.GetHeaders();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("There is a DB connection problem.");
-            }
-            
-        }
-       
-        private static void OnlyDecimal(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
-            {
-                e.Handled = true;
-            }
-
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf(',') > -1))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private static void OnlyNumber(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-
-        }
-
-        private void dgv_headers_DoubleClick(object sender, EventArgs e)
-        {
-            if (dgv_headers.CurrentRow.Index != -1) {
-                selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
-                Headers header = _dbManager.GetHeaderById(selectedIdHeader);
-                if (header!= null)
-                {
-                    tb_headerCustomerNumber.Text = header.CustomerNumber.ToString();
-                    tb_headerName.Text = header.Name.ToString();
-                    tb_headerNetPrice.Text = header.NetPrice.ToString();
-                    btn_headerCreateUpdate.Text = "Update";
-                }
-
-            }
-        }
-
-        private void dgv_headers_SelectionChanged(object sender, EventArgs e)
-        {
-            selectedIdHeader = (int)dgv_headers.CurrentRow.Cells["Id"].Value;
-            LoadRows(selectedIdHeader);
-        }
-
-        private void LoadRows(int id)
-        {
-            try
-            {
-                dgv_rows.AutoGenerateColumns = false;
-                dgv_rows.DataSource = _dbManager.GetRowsById(id);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("There is a DB connection problem.");
-            }
-        }
-
-        
-
-        private void dgv_rows_DoubleClick(object sender, EventArgs e)
-        {
-            if (dgv_rows.CurrentRow.Index != -1)
-            {
-                selectedIdRow = (int)dgv_rows.CurrentRow.Cells["rowId"].Value;
-                Rows row = _dbManager.GetRowById(selectedIdRow);
-                if (row != null)
-                {
-                    tb_rowArticleName.Text = row.ArticleName;
-                    tb_rowNetPrice.Text = row.NetPrice.ToString();
-                    tb_rowQuantity.Text = row.Quantity.ToString();
-                    btn_rowCreateUpdate.Text = "Update";
-                }
-
-            }
-        }
-
         private void btn_github_Click(object sender, EventArgs e)
         {
-            
+
         }
+
+        #endregion Events
     }
 }

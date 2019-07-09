@@ -33,6 +33,13 @@ namespace ITCenterApp.Database
         {
             using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
             {
+                // first delete all rows
+                var rows = _dbContext.Rows.Where(c => c.HeaderId == id);
+                foreach (var item in rows)
+                {
+                    _dbContext.Rows.Remove(item);
+                }
+
                 Headers header = new Headers();
                 header.Id = id;
                 _dbContext.Headers.Attach(header);
