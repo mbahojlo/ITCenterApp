@@ -20,7 +20,6 @@ namespace ITCenterApp.Database
 
         public void UpdateHeader(Headers header)
         {
-            throw new Exception("test");
             using (ITCenterDBEntitiesContext _dbContext = new ITCenterDBEntitiesContext())
             {
                 _dbContext.Headers.Attach(header);

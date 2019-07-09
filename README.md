@@ -1,5 +1,5 @@
 # ITCenterApp
-Zadanie Rekrutacyjne - Marcin Bahojło
+Recruitment task - Marcin Bahojło
 
 To run application:
 1) Database should be createted with SQLSCRIPT.sql which is in root folder.

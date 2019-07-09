@@ -30,6 +30,7 @@ namespace ITCenterApp
             }
 
         }
+
         static void HandleUnhandledException(Exception e)
         {
             MessageBox.Show(e.Message);
