@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ITCenterDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Headers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CustomerNumber" Type="int" Nullable="false" />
+    <Property Name="NetPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="GrossPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rows">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HeaderId" Type="int" Nullable="false" />
+    <Property Name="ArticleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Quantity" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+    <Property Name="NetPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="GrossPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+  </EntityType>
+  <Association Name="Rows_fk">
+    <End Role="Headers" Type="Self.Headers" Multiplicity="1" />
+    <End Role="Rows" Type="Self.Rows" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Headers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rows">
+        <PropertyRef Name="HeaderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ITCenterDBModelStoreContainer">
+    <EntitySet Name="Headers" EntityType="Self.Headers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rows" EntityType="Self.Rows" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="Rows_fk" Association="Self.Rows_fk">
+      <End Role="Headers" EntitySet="Headers" />
+      <End Role="Rows" EntitySet="Rows" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

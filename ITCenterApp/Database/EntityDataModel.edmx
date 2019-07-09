@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ITCenterDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Headers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CustomerNumber" Type="int" Nullable="false" />
+          <Property Name="NetPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrossPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rows">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HeaderId" Type="int" Nullable="false" />
+          <Property Name="ArticleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Quantity" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="NetPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrossPrice" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+        </EntityType>
+        <Association Name="Rows_fk">
+          <End Role="Headers" Type="Self.Headers" Multiplicity="1" />
+          <End Role="Rows" Type="Self.Rows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Headers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rows">
+              <PropertyRef Name="HeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ITCenterDBModelStoreContainer">
+          <EntitySet Name="Headers" EntityType="Self.Headers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rows" EntityType="Self.Rows" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Rows_fk" Association="Self.Rows_fk">
+            <End Role="Headers" EntitySet="Headers" />
+            <End Role="Rows" EntitySet="Rows" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ITCenterDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Headers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CustomerNumber" Type="Int32" Nullable="false" />
+          <Property Name="NetPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrossPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Rows" Relationship="Self.Rows_fk" FromRole="Headers" ToRole="Rows" />
+        </EntityType>
+        <EntityType Name="Rows">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HeaderId" Type="Int32" Nullable="false" />
+          <Property Name="ArticleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="NetPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="GrossPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Headers" Relationship="Self.Rows_fk" FromRole="Rows" ToRole="Headers" />
+        </EntityType>
+        <Association Name="Rows_fk">
+          <End Role="Headers" Type="Self.Headers" Multiplicity="1" />
+          <End Role="Rows" Type="Self.Rows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Headers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rows">
+              <PropertyRef Name="HeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ITCenterDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Headers" EntityType="Self.Headers" />
+          <EntitySet Name="Rows" EntityType="Self.Rows" />
+          <AssociationSet Name="Rows_fk" Association="Self.Rows_fk">
+            <End Role="Headers" EntitySet="Headers" />
+            <End Role="Rows" EntitySet="Rows" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ITCenterDBModelStoreContainer" CdmEntityContainer="ITCenterDBEntities">
+          <EntitySetMapping Name="Headers">
+            <EntityTypeMapping TypeName="ITCenterDBModel.Headers">
+              <MappingFragment StoreEntitySet="Headers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
+                <ScalarProperty Name="NetPrice" ColumnName="NetPrice" />
+                <ScalarProperty Name="GrossPrice" ColumnName="GrossPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rows">
+            <EntityTypeMapping TypeName="ITCenterDBModel.Rows">
+              <MappingFragment StoreEntitySet="Rows">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="HeaderId" ColumnName="HeaderId" />
+                <ScalarProperty Name="ArticleName" ColumnName="ArticleName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="NetPrice" ColumnName="NetPrice" />
+                <ScalarProperty Name="GrossPrice" ColumnName="GrossPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
